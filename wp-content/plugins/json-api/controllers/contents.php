@@ -168,31 +168,29 @@ class JSON_API_Contents_Controller {
     //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
-    $query = $this->setOrder();
+    $query = array( "orderby" => "sort_order" , "order" => "ASC");
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
      // print_r($posts);exit;
     $posts = $this->privileges_repo($posts);
-    //print_r($posts);exit;
+    
     return $this->posts_result($posts);
   }
   
   protected function privileges_repo($datas){
     $posts = array();
-    $lang = $this->get_lang();
     foreach ($datas as $data) {
         
-     //  print_r($data);exit;
       $post = array();
       $post['id'] = $data->id;
       $post['title'] = $data->title ;
       $post['detail'] = $data->custom_fields->detail[0];
       
       $attachments = $data->attachments;
-      $t = $this->wp_attach($data->custom_fields->thumbnail , 'thumbnail' , $attachments );
+      $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
       $post['thumbnail'] = $t[0]['url'];
-      $t = $this->wp_attach($data->custom_fields->thumbnail , 'image' , $attachments );
+      $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
       $post['image'] = $t[0]['url'];
       $post['start_date'] = $data->custom_fields->start_date[0];
       $post['end_date'] = $data->custom_fields->end_date[0];   
