@@ -204,6 +204,7 @@ class JSON_API_Contents_Controller {
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
+        $post['ussd'] = $data->custom_fields->ussd[0];
 
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
