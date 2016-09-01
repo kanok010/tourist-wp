@@ -168,7 +168,7 @@ class JSON_API_Contents_Controller {
     //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
-    $query = array( "orderby" => "sort_order" , "order" => "ASC");
+    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -179,27 +179,47 @@ class JSON_API_Contents_Controller {
   }
   
   protected function privileges_repo($datas){
+    $today = date("Y-m-d");
     $posts = array();
     foreach ($datas as $data) {
-        
-      $post = array();
-      $post['id'] = $data->id;
-      $post['title'] = $data->title ;
-      $post['detail'] = $data->custom_fields->detail[0];
+     
+      $s_date =  $data->custom_fields->start_date[0];
+      $yy = substr($s_date,0,4);
+      $mm = substr($s_date,4,2);
+      $dd = substr($s_date,6,2);
+      $start_date = date('Y-m-d', strtotime($yy."-".$mm."-".$dd));
       
-      $attachments = $data->attachments;
-      $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
-      $post['thumbnail'] = $t[0]['url'];
-      $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
-      $post['image'] = $t[0]['url'];
-      $post['start_date'] = $data->custom_fields->start_date[0];
-      $post['end_date'] = $data->custom_fields->end_date[0];   
-      $post['sort_order'] = $data->custom_fields->sort_order[0];   
-      $post['status'] = $data->status;
-      $post['created_date'] = $data->date;
-      $post['updated_date'] = $data->modified;
       
-      array_push($posts, $post);
+      $e_date =  $data->custom_fields->end_date[0];
+      $yyy = substr($e_date,0,4);
+      $mmm = substr($e_date,4,2);
+      $ddd = substr($e_date,6,2);
+      $end_date = date('Y-m-d', strtotime($yyy."-".$mmm."-".$ddd));
+      
+      //echo "Start:".$start_date."<br/>";
+      //echo "End:".$end_date."<br/>";
+          
+      if(($start_date <= $today) &&($today <= $end_date)) {
+        $post = array();
+        $post['id'] = $data->id;
+        $post['title'] = $data->title ;
+        $post['detail'] = $data->custom_fields->detail[0];
+
+        $attachments = $data->attachments;
+        $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+        $post['thumbnail'] = $t[0]['url'];
+        $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
+        $post['image'] = $t[0]['url'];
+        $post['start_date'] = $start_date;
+        $post['end_date'] = $end_date;   
+        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        $post['status'] = $data->status;
+        $post['created_date'] = $data->date;
+        $post['updated_date'] = $data->modified;
+
+        array_push($posts, $post);
+      }//end if
+       
     }
     return $posts;
   }
