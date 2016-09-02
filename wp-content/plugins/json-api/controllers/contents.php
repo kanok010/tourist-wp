@@ -175,7 +175,7 @@ class JSON_API_Contents_Controller {
      // print_r($posts);exit;
     $posts = $this->privileges_repo($posts);
     
-    return $this->posts_result($posts);
+    return $this->posts_result2($posts);
   }
   
   protected function privileges_repo($datas){
@@ -421,7 +421,7 @@ class JSON_API_Contents_Controller {
       return array( "meta_key" => $order_by ,"orderby" => "meta_value" ,  "order" => $order );
     }
   }
-
+  
   protected function posts_result($posts) {
     global $wp_query;
 
@@ -431,6 +431,16 @@ class JSON_API_Contents_Controller {
       'count' => (int) $wp_query->found_posts,
       'cur_pages' => $wp_query->query_vars['paged'] <= 0 ? 1 : $wp_query->query_vars['paged'],
       'pages' => $wp_query->max_num_pages,
+      'post_type' => $wp_query->query_vars['post_type'],
+      'datas' => $posts
+    );
+  }
+
+  protected function posts_result2($posts) {
+    global $wp_query;
+
+    return array(
+      'count' => count($posts), //offset
       'post_type' => $wp_query->query_vars['post_type'],
       'datas' => $posts
     );
