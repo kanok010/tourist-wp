@@ -199,7 +199,7 @@ class JSON_API_Contents_Controller {
       //echo "Start:".$start_date."<br/>";
       //echo "End:".$end_date."<br/>";
           
-      if(($start_date <= $today) &&($today <= $end_date)) {
+      if((strtotime($start_date) <= strtotime($today)) &&(strtotime($today) <= strtotime($end_date))) {
         $post = array();
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
@@ -222,6 +222,7 @@ class JSON_API_Contents_Controller {
       }//end if
        
     }
+    //print_r($posts);exit;
     return $posts;
   }
 
