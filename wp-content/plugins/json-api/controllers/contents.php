@@ -163,9 +163,19 @@ class JSON_API_Contents_Controller {
     }
     return $posts;
   }
+  //get phone number
+  public function get_phone_number(){
+    
+    $msisdn = (isset($_SERVER['HTTP_X_MSISDN'])?$_SERVER['HTTP_X_MSISDN']:'');
 
+    $oper = (isset($_SERVER['HTTP_X_OPER'])?$_SERVER['HTTP_X_OPER']:'');
+    return array(
+      'msisdn' => $msisdn, 
+      'oper' => $oper
+    );
+  }
   
-    //privileges
+  //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
@@ -225,6 +235,48 @@ class JSON_API_Contents_Controller {
     //print_r($posts);exit;
     return $posts;
   }
+  
+  //Advertise
+  public function advertising( $post_type = 'advertising',$query = false){
+    global $json_api;
+    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+
+    $posts = $json_api->introspector->get_posts($query,false,$post_type);
+    
+    //print_r($posts);exit;
+    $posts = $this->advertising_repo($posts);
+    
+    return $this->posts_result2($posts);
+  }
+  
+  protected function advertising_repo($datas){
+    $posts = array();
+    foreach ($datas as $data) {
+     
+      
+        $post = array();
+        $post['id'] = $data->id;
+        $post['title'] = $data->title ;
+        $attachments = $data->attachments;
+        $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+        $post['thumbnail'] = $t[0]['url'];
+        
+        $post['link_url'] = $data->custom_fields->link_url[0];
+
+
+        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        $post['status'] = $data->status;
+        $post['created_date'] = $data->date;
+        $post['updated_date'] = $data->modified;
+
+        array_push($posts, $post);
+      
+       
+    }
+    //print_r($posts);exit;
+    return $posts;
+  }
+  
 
   //hotline
   public function hotline( $post_type = 'hotline',$query = false){
