@@ -237,6 +237,45 @@ class JSON_API_Contents_Controller {
     //print_r($posts);exit;
     return $posts;
   }
+  
+   //Packages
+  public function packages( $post_type = 'package',$query = false){
+    global $json_api;
+    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+
+    $posts = $json_api->introspector->get_posts($query,false,$post_type);
+    
+    //print_r($posts);exit;
+    $posts = $this->packages_repo($posts);
+    
+    return $this->posts_result2($posts);
+  }
+  
+  protected function packages_repo($datas){
+    $posts = array();
+    foreach ($datas as $data) {
+     
+      
+        $post = array();
+        $post['id'] = $data->id;
+        $post['title'] = $data->title ;
+        $post['detail'] = $data->custom_fields->detail[0];
+        $post['pack_code'] = $data->custom_fields->pack_code[0];
+        $post['ussd'] = $data->custom_fields->ussd[0];
+
+
+        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        $post['status'] = $data->status;
+        $post['created_date'] = $data->date;
+        $post['updated_date'] = $data->modified;
+
+        array_push($posts, $post);
+      
+       
+    }
+    //print_r($posts);exit;
+    return $posts;
+  }
 
   //hotline
   public function hotline( $post_type = 'hotline',$query = false){
