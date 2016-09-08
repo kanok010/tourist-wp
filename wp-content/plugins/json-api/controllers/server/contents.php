@@ -163,7 +163,19 @@ class JSON_API_Contents_Controller {
     }
     return $posts;
   }
+  
+  
+  //get phone number
+  public function get_phone_number(){
+    
+    $msisdn = (isset($_SERVER['HTTP_X_MSISDN'])?$_SERVER['HTTP_X_MSISDN']:'');
 
+    $oper = (isset($_SERVER['HTTP_X_OPER'])?$_SERVER['HTTP_X_OPER']:'');
+    return array(
+      'msisdn' => $msisdn, 
+      'oper' => $oper
+    );
+  }
   
     //privileges
   public function privileges( $post_type = 'privilege',$query = false){
