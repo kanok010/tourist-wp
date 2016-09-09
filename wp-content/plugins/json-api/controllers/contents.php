@@ -178,8 +178,15 @@ class JSON_API_Contents_Controller {
   //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
+    
+    if (isset($_GET['lang']) && ($_GET['lang']!="")){
+        $lang = $_GET['lang'];
+    }else{
+        $lang = 'cn';
+    }
+    
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
-
+    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
      // print_r($posts);exit;
@@ -188,7 +195,7 @@ class JSON_API_Contents_Controller {
     return $this->posts_result2($posts);
   }
   
-  protected function privileges_repo($datas){
+  protected function privileges_repo($datas){ 
     $today = date("Y-m-d");
     $posts = array();
     foreach ($datas as $data) {
@@ -215,7 +222,8 @@ class JSON_API_Contents_Controller {
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
-
+        $post['lang'] = $data->custom_fields->lang[0];
+        
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -474,7 +482,7 @@ class JSON_API_Contents_Controller {
   protected function get_lang(){
     return isset($_GET['lang'])&&!empty($_GET['lang']) ? strtolower($_GET['lang']) : 'th'; 
   }
-
+  
   protected function get_shelf(){
     return isset($_GET['shelf_name'])&&!empty($_GET['shelf_name']) ? strtolower($_GET['shelf_name']) : null; 
   }
