@@ -177,7 +177,7 @@ class JSON_API_Contents_Controller {
     );
   }
   
-    //privileges
+  //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
@@ -238,7 +238,7 @@ class JSON_API_Contents_Controller {
     return $posts;
   }
   
-   //Packages
+  //Packages
   public function packages( $post_type = 'package',$query = false){
     global $json_api;
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
@@ -276,6 +276,60 @@ class JSON_API_Contents_Controller {
     //print_r($posts);exit;
     return $posts;
   }
+  
+  //Advertise
+  public function advertising( $post_type = 'advertising',$query = false){
+    global $json_api;
+    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+
+    $posts = $json_api->introspector->get_posts($query,false,$post_type);
+    
+    //print_r($posts);exit;
+    $posts = $this->advertising_repo($posts);
+    
+    return $this->posts_result2($posts);
+  }
+  
+  protected function advertising_repo($datas){
+    $today = date("Y-m-d");  
+    $posts = array();
+    foreach ($datas as $data) {
+     
+        $s_date =  $data->custom_fields->start_date[0];
+        $yy = substr($s_date,0,4);
+        $mm = substr($s_date,4,2);
+        $dd = substr($s_date,6,2);
+        $start_date = date('Y-m-d', strtotime($yy."-".$mm."-".$dd));
+      
+      
+        $e_date =  $data->custom_fields->end_date[0];
+        $yyy = substr($e_date,0,4);
+        $mmm = substr($e_date,4,2);
+        $ddd = substr($e_date,6,2);
+        $end_date = date('Y-m-d', strtotime($yyy."-".$mmm."-".$ddd));
+        if((strtotime($start_date) <= strtotime($today)) &&(strtotime($today) <= strtotime($end_date))) {
+            $post = array();
+            $post['id'] = $data->id;
+            $post['title'] = $data->title ;
+            $attachments = $data->attachments;
+            $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+            $post['thumbnail'] = $t[0]['url'];
+            $post['link_url'] = $data->custom_fields->link_url[0];
+            $post['start_date'] = $start_date;
+            $post['end_date'] = $end_date; 
+            $post['sort_order'] = $data->custom_fields->sort_order[0];   
+            $post['status'] = $data->status;
+            $post['created_date'] = $data->date;
+            $post['updated_date'] = $data->modified;
+
+            array_push($posts, $post);
+        }//end if
+       
+    }
+    //print_r($posts);exit;
+    return $posts;
+  }
+  
 
   //hotline
   public function hotline( $post_type = 'hotline',$query = false){
