@@ -182,7 +182,7 @@ class JSON_API_Contents_Controller {
     if (isset($_GET['lang']) && ($_GET['lang']!="")){
         $lang = $_GET['lang'];
     }else{
-        $lang = 'cn';
+        $lang = 'en';
     }
     
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
@@ -247,7 +247,15 @@ class JSON_API_Contents_Controller {
   //Packages
   public function packages( $post_type = 'package',$query = false){
     global $json_api;
+   
+    if (isset($_GET['lang']) && ($_GET['lang']!="")){
+        $lang = $_GET['lang'];
+    }else{
+        $lang = 'en';
+    }
+    
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -268,8 +276,7 @@ class JSON_API_Contents_Controller {
         $post['detail'] = $data->custom_fields->detail[0];
         $post['pack_code'] = $data->custom_fields->pack_code[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
-
-
+        $post['lang'] = $data->custom_fields->lang[0];
         $post['sort_order'] = $data->custom_fields->sort_order[0];   
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
@@ -286,7 +293,15 @@ class JSON_API_Contents_Controller {
   //Advertise
   public function advertising( $post_type = 'advertising',$query = false){
     global $json_api;
+    
+    if (isset($_GET['lang']) && ($_GET['lang']!="")){
+        $lang = $_GET['lang'];
+    }else{
+        $lang = 'en';
+    }
+    
     $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -323,6 +338,7 @@ class JSON_API_Contents_Controller {
             $post['link_url'] = $data->custom_fields->link_url[0];
             $post['start_date'] = $start_date;
             $post['end_date'] = $end_date; 
+            $post['lang'] = $data->custom_fields->lang[0];  
             $post['sort_order'] = $data->custom_fields->sort_order[0];   
             $post['status'] = $data->status;
             $post['created_date'] = $data->date;
