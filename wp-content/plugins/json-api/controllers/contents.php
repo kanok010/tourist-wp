@@ -274,6 +274,7 @@ class JSON_API_Contents_Controller {
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
+        $post['price'] = $data->custom_fields->price[0];
         $post['pack_code'] = $data->custom_fields->pack_code[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
         $post['lang'] = $data->custom_fields->lang[0];
