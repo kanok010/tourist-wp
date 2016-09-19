@@ -180,7 +180,6 @@ class JSON_API_Contents_Controller {
   //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
-    //$query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -241,7 +240,7 @@ class JSON_API_Contents_Controller {
   //Packages
   public function packages( $post_type = 'package',$query = false){
     global $json_api;
-    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -279,7 +278,7 @@ class JSON_API_Contents_Controller {
   //Advertise
   public function advertising( $post_type = 'advertising',$query = false){
     global $json_api;
-    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
