@@ -185,11 +185,12 @@ class JSON_API_Contents_Controller {
         $lang = 'en';
     }
     
-    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
-    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    //$query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    //$query = array( "meta_key" => "lang" ,"meta_value" => $lang );
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
-     // print_r($posts);exit;
+    // print_r($posts);exit;
     $posts = $this->privileges_repo($posts);
     
     return $this->posts_result2($posts);
@@ -231,7 +232,7 @@ class JSON_API_Contents_Controller {
         $post['image'] = $t[0]['url'];
         $post['start_date'] = $start_date;
         $post['end_date'] = $end_date;   
-        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        //$post['sort_order'] = $data->custom_fields->sort_order[0];   
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
         $post['updated_date'] = $data->modified;
@@ -254,8 +255,9 @@ class JSON_API_Contents_Controller {
         $lang = 'en';
     }
     
-    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
-    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    //$query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    //$query = array( "meta_key" => "lang" ,"meta_value" => $lang );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -278,7 +280,7 @@ class JSON_API_Contents_Controller {
         $post['pack_code'] = $data->custom_fields->pack_code[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
         $post['lang'] = $data->custom_fields->lang[0];
-        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        //$post['sort_order'] = $data->custom_fields->sort_order[0];   
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
         $post['updated_date'] = $data->modified;
@@ -301,8 +303,9 @@ class JSON_API_Contents_Controller {
         $lang = 'en';
     }
     
-    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
-    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    //$query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    //$query = array( "meta_key" => "lang" ,"meta_value" => $lang );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -340,7 +343,7 @@ class JSON_API_Contents_Controller {
             $post['start_date'] = $start_date;
             $post['end_date'] = $end_date; 
             $post['lang'] = $data->custom_fields->lang[0];  
-            $post['sort_order'] = $data->custom_fields->sort_order[0];   
+            //$post['sort_order'] = $data->custom_fields->sort_order[0];   
             $post['status'] = $data->status;
             $post['created_date'] = $data->date;
             $post['updated_date'] = $data->modified;
