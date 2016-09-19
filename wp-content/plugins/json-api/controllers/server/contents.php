@@ -180,8 +180,8 @@ class JSON_API_Contents_Controller {
   //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
-    $query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
-
+    //$query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
      // print_r($posts);exit;
@@ -261,9 +261,8 @@ class JSON_API_Contents_Controller {
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
         $post['pack_code'] = $data->custom_fields->pack_code[0];
+        $post['price'] = $data->custom_fields->price[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
-
-
         $post['sort_order'] = $data->custom_fields->sort_order[0];   
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
