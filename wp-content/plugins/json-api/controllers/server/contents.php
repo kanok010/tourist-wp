@@ -216,7 +216,7 @@ class JSON_API_Contents_Controller {
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
-
+        $post['pack_code'] = $data->custom_fields->pack_code[0];
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -224,7 +224,7 @@ class JSON_API_Contents_Controller {
         $post['image'] = $t[0]['url'];
         $post['start_date'] = $start_date;
         $post['end_date'] = $end_date;   
-        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        //$post['sort_order'] = $data->custom_fields->sort_order[0];   
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
         $post['updated_date'] = $data->modified;
@@ -258,11 +258,14 @@ class JSON_API_Contents_Controller {
         $post = array();
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
+        $attachments = $data->attachments;
+        $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+        $post['thumbnail'] = $t[0]['url'];
         $post['detail'] = $data->custom_fields->detail[0];
         $post['pack_code'] = $data->custom_fields->pack_code[0];
         $post['price'] = $data->custom_fields->price[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
-        $post['sort_order'] = $data->custom_fields->sort_order[0];   
+        //$post['sort_order'] = $data->custom_fields->sort_order[0];   
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
         $post['updated_date'] = $data->modified;
@@ -315,7 +318,7 @@ class JSON_API_Contents_Controller {
             $post['link_url'] = $data->custom_fields->link_url[0];
             $post['start_date'] = $start_date;
             $post['end_date'] = $end_date; 
-            $post['sort_order'] = $data->custom_fields->sort_order[0];   
+            //$post['sort_order'] = $data->custom_fields->sort_order[0];   
             $post['status'] = $data->status;
             $post['created_date'] = $data->date;
             $post['updated_date'] = $data->modified;
