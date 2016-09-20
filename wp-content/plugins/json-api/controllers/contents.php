@@ -223,6 +223,7 @@ class JSON_API_Contents_Controller {
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
+        $post['pack_code'] = $data->custom_fields->pack_code[0];
         $post['lang'] = $data->custom_fields->lang[0];
         
         $attachments = $data->attachments;
@@ -275,6 +276,9 @@ class JSON_API_Contents_Controller {
         $post = array();
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
+        $attachments = $data->attachments;
+        $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+        $post['thumbnail'] = $t[0]['url'];
         $post['detail'] = $data->custom_fields->detail[0];
         $post['price'] = $data->custom_fields->price[0];
         $post['pack_code'] = $data->custom_fields->pack_code[0];
