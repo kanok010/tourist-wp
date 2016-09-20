@@ -344,6 +344,7 @@ class JSON_API_Contents_Controller {
             $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
             $post['thumbnail'] = $t[0]['url'];
             $post['link_url'] = $data->custom_fields->link_url[0];
+            $post['weight'] = $data->custom_fields->weight[0]."%";
             $post['start_date'] = $start_date;
             $post['end_date'] = $end_date; 
             $post['lang'] = $data->custom_fields->lang[0];  
