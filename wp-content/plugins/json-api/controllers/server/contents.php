@@ -190,6 +190,7 @@ class JSON_API_Contents_Controller {
   }
   
   protected function privileges_repo($datas){
+    date_default_timezone_set("Asia/Bangkok");   
     $today = date("Y-m-d");
     $posts = array();
     foreach ($datas as $data) {
@@ -258,6 +259,7 @@ class JSON_API_Contents_Controller {
         $post = array();
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
+        $post['description'] = $data->custom_fields->description[0];
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -297,6 +299,7 @@ class JSON_API_Contents_Controller {
   }
   
   protected function advertising_repo($datas){
+    date_default_timezone_set("Asia/Bangkok");   
     $today = date("Y-m-d");  
     $posts = array();
     foreach ($datas as $data) {
