@@ -196,8 +196,9 @@ class JSON_API_Contents_Controller {
     return $this->posts_result2($posts);
   }
   
-  protected function privileges_repo($datas){ 
-    $today = date("Y-m-d");
+  protected function privileges_repo($datas){   
+    date_default_timezone_set("Asia/Bangkok");
+    $today = date("Y-m-d"); 
     $posts = array();
     foreach ($datas as $data) {
      
@@ -216,9 +217,9 @@ class JSON_API_Contents_Controller {
       
       //echo "Start:".$start_date."<br/>";
       //echo "End:".$end_date."<br/>";
-          
+                 
       if((strtotime($start_date) <= strtotime($today)) &&(strtotime($today) <= strtotime($end_date))) {
-        $post = array();
+        $post = array(); 
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
         $post['detail'] = $data->custom_fields->detail[0];
@@ -237,7 +238,7 @@ class JSON_API_Contents_Controller {
         $post['status'] = $data->status;
         $post['created_date'] = $data->date;
         $post['updated_date'] = $data->modified;
-
+        
         array_push($posts, $post);
       }//end if
        
@@ -276,6 +277,7 @@ class JSON_API_Contents_Controller {
         $post = array();
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
+        $post['description'] = $data->custom_fields->description[0];
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -325,6 +327,7 @@ class JSON_API_Contents_Controller {
   }
   
   protected function advertising_repo($datas){
+    date_default_timezone_set("Asia/Bangkok");  
     $today = date("Y-m-d");  
     $posts = array();
     foreach ($datas as $data) {
