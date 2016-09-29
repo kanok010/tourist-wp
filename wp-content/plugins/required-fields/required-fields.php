@@ -242,7 +242,7 @@ function required_fields()
 				if (isset($opt['rf_for_page_enabled']) && isset($opt['rf_title_for_page']))
 				{
 					global $typenow;
-					if(in_array($typenow, array('post','page')))
+					if(in_array($typenow, array('post','page','privilege','package','advertising')))
 					{	
 						echo "<script type='text/javascript'>\n";
 						  echo "
@@ -263,7 +263,7 @@ function required_fields()
 					
 				} else {
 					global $post_type;
-					if($post_type == 'post')
+					if($post_type == 'post' || $post_type == 'privilege' ||$post_type == 'package'||$post_type == 'advertising')
 					{	
 						echo "<script type='text/javascript'>\n";
 						  echo "
