@@ -348,8 +348,9 @@ class JSON_API_Contents_Controller {
             $post = array();
             $post['id'] = $data->id;
             $post['title'] = $data->title ;
+            $post['type'] = $data->custom_fields->type[0];
             $attachments = $data->attachments;
-            $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+            $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );     
             $post['thumbnail'] = $t[0]['url'];
             $post['link_url'] = $data->custom_fields->link_url[0];
             $post['weight'] = $data->custom_fields->weight[0];
