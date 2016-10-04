@@ -259,7 +259,7 @@ class JSON_API_Contents_Controller {
     
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
     //$query = array( "meta_key" => "sort_order" ,"orderby" => "meta_value" ,  "order" => "ASC" );
-    //$query = array( "meta_key" => "lang" ,"meta_value" => $lang );
+    $query = array( "meta_key" => "lang" ,"meta_value" => $lang );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -277,16 +277,21 @@ class JSON_API_Contents_Controller {
         $post = array();
         $post['id'] = $data->id;
         $post['title'] = $data->title ;
+        $post['title_cn'] = $data->custom_fields->title_cn[0];
         $post['description'] = $data->custom_fields->description[0];
+        $post['description_cn'] = $data->custom_fields->description_cn[0];
+        $post['detail'] = $data->custom_fields->detail[0];
+        $post['detail_cn'] = $data->custom_fields->detail_cn[0];
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
+        $tt = $this->wp_attach($data->custom_fields->thumbnail_cn , 'full' , $attachments );
+        $post['thumbnail_cn'] = $tt[0]['url'];                
         if($post['thumbnail']==""){
            $post['type'] = "text"; 
         }else{
            $post['type'] = "image";  
-        }
-        $post['detail'] = $data->custom_fields->detail[0];
+        }       
         $post['price'] = $data->custom_fields->price[0];
         $post['pack_code'] = $data->custom_fields->pack_code[0];
         $post['ussd'] = $data->custom_fields->ussd[0];
@@ -370,6 +375,58 @@ class JSON_API_Contents_Controller {
     return $posts;
   }
   
+    //announcement
+  public function announcement( $post_type = 'announcement',$query = false){
+    global $json_api;
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+
+    $posts = $json_api->introspector->get_posts($query,false,$post_type);
+    
+    //print_r($posts);exit;
+    $posts = $this->announcement_repo($posts);
+    
+    return $this->posts_result2($posts);
+  }
+  
+  protected function announcement_repo($datas){
+    date_default_timezone_set("Asia/Bangkok");   
+    $today = date("Y-m-d");  
+    $posts = array();
+    foreach ($datas as $data) {
+     
+        $s_date =  $data->custom_fields->start_date[0];
+        $yy = substr($s_date,0,4);
+        $mm = substr($s_date,4,2);
+        $dd = substr($s_date,6,2);
+        $start_date = date('Y-m-d', strtotime($yy."-".$mm."-".$dd));
+      
+      
+        $e_date =  $data->custom_fields->end_date[0];
+        $yyy = substr($e_date,0,4);
+        $mmm = substr($e_date,4,2);
+        $ddd = substr($e_date,6,2);
+        $end_date = date('Y-m-d', strtotime($yyy."-".$mmm."-".$ddd));
+        if((strtotime($start_date) <= strtotime($today)) &&(strtotime($today) <= strtotime($end_date))) {
+            $post = array();
+            $post['id'] = $data->id;
+            $post['title'] = $data->title ;
+            $attachments = $data->attachments;
+            $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
+            $post['thumbnail'] = $t[0]['url'];
+            $post['start_date'] = $start_date;
+            $post['end_date'] = $end_date; 
+            //$post['sort_order'] = $data->custom_fields->sort_order[0];   
+            $post['status'] = $data->status;
+            $post['created_date'] = $data->date;
+            $post['updated_date'] = $data->modified;
+
+            array_push($posts, $post);
+        }//end if
+       
+    }
+    //print_r($posts);exit;
+    return $posts;
+  }
 
   //hotline
   public function hotline( $post_type = 'hotline',$query = false){
