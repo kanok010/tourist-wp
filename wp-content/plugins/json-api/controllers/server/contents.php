@@ -292,7 +292,7 @@ class JSON_API_Contents_Controller {
   
   //Advertise
   public function advertising( $post_type = 'advertising',$query = false){
-    global $json_api;
+    global $json_api,$wp_query;
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
@@ -300,7 +300,12 @@ class JSON_API_Contents_Controller {
     //print_r($posts);exit;
     $posts = $this->advertising_repo($posts);
     
-    return $this->posts_result2($posts);
+    return array(
+      'count' => count($posts), //offset
+      'post_type' => $wp_query->query_vars['post_type'],
+      'weight' => 30,  
+      'datas' => $posts
+    );
   }
   
   protected function advertising_repo($datas){
@@ -330,7 +335,7 @@ class JSON_API_Contents_Controller {
             $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
             $post['thumbnail'] = $t[0]['url'];
             $post['link_url'] = $data->custom_fields->link_url[0];
-            $post['weight'] = $data->custom_fields->weight[0];
+            //$post['weight'] = $data->custom_fields->weight[0];
             $post['start_date'] = $start_date;
             $post['end_date'] = $end_date; 
             //$post['sort_order'] = $data->custom_fields->sort_order[0];   
