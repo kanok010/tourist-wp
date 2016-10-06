@@ -349,16 +349,23 @@ class JSON_API_Contents_Controller {
             $post = array();
             $post['id'] = $data->id;
             $post['title'] = $data->title ;
-            $post['type'] = $data->custom_fields->type[0];
             $attachments = $data->attachments;
             $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );     
             $post['thumbnail'] = $t[0]['url'];
-            $post['link_url'] = $data->custom_fields->link_url[0];
-            //$post['weight'] = $data->custom_fields->weight[0];
+            
+            $post['type'] = $data->custom_fields->type[0];
+            if($post['type'] =="schema"){
+                $post['page_type'] = $data->custom_fields->page_type[0];
+                $post['link_url'] = "";
+                
+            }else{
+                $post['page_type'] = "";
+                $post['link_url'] = $data->custom_fields->link_url[0];                
+            }
+  
             $post['start_date'] = $start_date;
             $post['end_date'] = $end_date; 
-            $post['lang'] = $data->custom_fields->lang[0];  
-            //$post['sort_order'] = $data->custom_fields->sort_order[0];   
+            $post['lang'] = $data->custom_fields->lang[0];    
             $post['status'] = $data->status;
             $post['created_date'] = $data->date;
             $post['updated_date'] = $data->modified;
