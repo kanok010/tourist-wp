@@ -375,7 +375,7 @@ class JSON_API_Contents_Controller {
   public function announcement( $post_type = 'announcement',$query = false){
     global $json_api;
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
-
+    $query = array("posts_per_page" => "1");
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
     //print_r($posts);exit;
@@ -391,34 +391,80 @@ class JSON_API_Contents_Controller {
     foreach ($datas as $data) {
      
         $s_date =  $data->custom_fields->start_date[0];
-        $yy = substr($s_date,0,4);
-        $mm = substr($s_date,4,2);
-        $dd = substr($s_date,6,2);
-        $start_date = date('Y-m-d', strtotime($yy."-".$mm."-".$dd));
-      
-      
-        $e_date =  $data->custom_fields->end_date[0];
-        $yyy = substr($e_date,0,4);
-        $mmm = substr($e_date,4,2);
-        $ddd = substr($e_date,6,2);
-        $end_date = date('Y-m-d', strtotime($yyy."-".$mmm."-".$ddd));
-        if((strtotime($start_date) <= strtotime($today)) &&(strtotime($today) <= strtotime($end_date))) {
-            $post = array();
-            $post['id'] = $data->id;
-            $post['title'] = $data->title ;
-            $attachments = $data->attachments;
-            $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
-            $post['thumbnail'] = $t[0]['url'];
-            $post['start_date'] = $start_date;
-            $post['end_date'] = $end_date; 
-            //$post['sort_order'] = $data->custom_fields->sort_order[0];   
-            $post['status'] = $data->status;
-            $post['created_date'] = $data->date;
-            $post['updated_date'] = $data->modified;
+        if($s_date){
+            $yy = substr($s_date,0,4);
+            $mm = substr($s_date,4,2);
+            $dd = substr($s_date,6,2);
+            $start_date = date('Y-m-d', strtotime($yy."-".$mm."-".$dd));            
+        }else{
+            $start_date ="";
+        }
 
-            array_push($posts, $post);
-        }//end if
-       
+        $e_date =  $data->custom_fields->end_date[0];
+        if($e_date){
+            $yyy = substr($e_date,0,4);
+            $mmm = substr($e_date,4,2);
+            $ddd = substr($e_date,6,2);
+            $end_date = date('Y-m-d', strtotime($yyy."-".$mmm."-".$ddd));
+        }else{
+            $end_date = "";
+        }
+        if(($start_date!="") && ($end_date!="")){
+            if((strtotime($start_date) <= strtotime($today)) &&(strtotime($today) <= strtotime($end_date))) {
+                $post = array();
+                $post['id'] = $data->id;
+                $post['title'] = $data->title;
+                $post['detail'] = $data->custom_fields->detail[0];
+                $attachments = $data->attachments;
+                $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
+                $post['image'] = $t[0]['url'];
+                $post['start_date'] = $start_date;
+                $post['end_date'] = $end_date; 
+                $post['btn_status'] = $data->custom_fields->btn_status[0];
+                if($post['btn_status'] == "1"){
+                    $post['btn_title'] = $data->custom_fields->btn_title[0];
+                    $post['btn_type'] = $data->custom_fields->btn_type[0];
+                    $post['btn_link'] = $data->custom_fields->btn_link[0];
+                }else{
+                    $post['btn_title'] = "";
+                    $post['btn_type'] = "";
+                    $post['btn_link'] = "";
+                }
+                $post['status'] = $data->status;
+                $post['created_date'] = $data->date;
+                $post['updated_date'] = $data->modified;
+
+                array_push($posts, $post);
+            }//end if2
+        }//end if1
+        if(($start_date!="") && ($end_date=="")){
+            if(strtotime($start_date) <= strtotime($today)){
+                $post = array();
+                $post['id'] = $data->id;
+                $post['title'] = $data->title;
+                $post['detail'] = $data->custom_fields->detail[0];
+                $attachments = $data->attachments;
+                $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
+                $post['image'] = $t[0]['url'];
+                $post['start_date'] = $start_date;
+                $post['end_date'] = $end_date; 
+                $post['btn_status'] = $data->custom_fields->btn_status[0];
+                if($post['btn_status'] == "1"){
+                    $post['btn_title'] = $data->custom_fields->btn_title[0];
+                    $post['btn_type'] = $data->custom_fields->btn_type[0];
+                    $post['btn_link'] = $data->custom_fields->btn_link[0];
+                }else{
+                    $post['btn_title'] = "";
+                    $post['btn_type'] = "";
+                    $post['btn_link'] = "";
+                }
+                $post['status'] = $data->status;
+                $post['created_date'] = $data->date;
+                $post['updated_date'] = $data->modified;
+
+                array_push($posts, $post);
+            }//end if2
+        }//end if1
     }
     //print_r($posts);exit;
     return $posts;
