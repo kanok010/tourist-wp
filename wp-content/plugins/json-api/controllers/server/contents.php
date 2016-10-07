@@ -303,7 +303,7 @@ class JSON_API_Contents_Controller {
     return array(
       'count' => count($posts), //offset
       'post_type' => $wp_query->query_vars['post_type'],
-      'weight' => 30,  
+      'weight' => 10,  
       'datas' => $posts
     );
   }
