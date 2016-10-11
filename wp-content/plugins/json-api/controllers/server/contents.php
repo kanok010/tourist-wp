@@ -737,7 +737,7 @@ class JSON_API_Contents_Controller {
   }
   //basic function
   protected function get_lang(){
-    return isset($_GET['lang'])&&!empty($_GET['lang']) ? strtolower($_GET['lang']) : 'th'; 
+    return isset($_GET['lang'])&&!empty($_GET['lang']) ? strtolower($_GET['lang']) : 'en'; 
   }
 
   protected function get_shelf(){
