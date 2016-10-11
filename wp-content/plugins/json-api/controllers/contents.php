@@ -334,6 +334,8 @@ class JSON_API_Contents_Controller {
         $post['description_cn'] = $data->custom_fields->description_cn[0];
         $post['detail'] = $data->custom_fields->detail[0];
         $post['detail_cn'] = $data->custom_fields->detail_cn[0];
+        $post['term'] = $data->custom_fields->term[0];
+        $post['term_cn'] = $data->custom_fields->term_cn[0];
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -391,6 +393,9 @@ class JSON_API_Contents_Controller {
         $post['description_cn'] = $data->custom_fields->description_cn[0];
         $post['detail'] = $data->custom_fields->detail[0];
         $post['detail_cn'] = $data->custom_fields->detail_cn[0];
+        $post['term'] = $data->custom_fields->term[0];
+        $post['term_cn'] = $data->custom_fields->term_cn[0];
+        
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -737,7 +742,7 @@ class JSON_API_Contents_Controller {
   }
   //basic function
   protected function get_lang(){
-    return isset($_GET['lang'])&&!empty($_GET['lang']) ? strtolower($_GET['lang']) : 'th'; 
+    return isset($_GET['lang'])&&!empty($_GET['lang']) ? strtolower($_GET['lang']) : 'en'; 
   }
 
   protected function get_shelf(){
