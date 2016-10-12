@@ -180,7 +180,7 @@ class JSON_API_Develop_Controller {
   //privileges
   public function privileges( $post_type = 'privilege',$query = false){
     global $json_api;
-    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC", "post_status"=>'pending' );
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
      // print_r($posts);exit;
@@ -311,8 +311,8 @@ class JSON_API_Develop_Controller {
   //Packages
   public function packages( $post_type = 'package',$query = false){
     global $json_api;
-    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
-
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" , "post_status"=>'pending');
+    
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
     //print_r($posts);exit;
@@ -425,7 +425,8 @@ class JSON_API_Develop_Controller {
   //Advertise
   public function advertising( $post_type = 'advertising',$query = false){
     global $json_api,$wp_query;
-    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    //$query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" , "post_status"=>'pending');
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -503,7 +504,8 @@ class JSON_API_Develop_Controller {
     //announcement
   public function announcement( $post_type = 'announcement',$query = false){
     global $json_api;
-    $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    //$query = array("orderby" => "menu_order" ,  "order" => "ASC" );
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC" , "post_status"=>'pending');
     $query = array("posts_per_page" => "1");
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
@@ -603,7 +605,7 @@ class JSON_API_Develop_Controller {
   public function hotline( $post_type = 'hotline',$query = false){
     global $json_api;
     $query = $this->setOrder();
-
+    $query = array("post_status"=>'pending');
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     $posts = $this->hotline_repo($posts);
     // print_r($posts);exit;
