@@ -1,10 +1,10 @@
 <?php
 /*
-Controller name: Contents
-Controller description: Data manipulation methods for posts
+Controller name: Develop
+Controller description: Data manipulation methods for post (dev)
 */
 
-class JSON_API_Contents_Controller {
+class JSON_API_Develop_Controller {
 
   //language
   public function language( $post_type = 'language',$query = false){
