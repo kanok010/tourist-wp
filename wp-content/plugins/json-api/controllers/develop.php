@@ -618,7 +618,9 @@ class JSON_API_Develop_Controller {
     foreach ($datas as $data) {
       $post = array();
       $post['id'] = $data->id;
-      $post['title'] = isset($data->custom_fields->{'title_'.$lang}[0])? $data->custom_fields->{'title_'.$lang}[0] : $data->title ;
+      
+      $title = trim($data->custom_fields->{'title_'.$lang}[0]);
+      $post['title'] = ($title)? $title : $data->title ;
       //
       $post['telephone'] = $data->custom_fields->telephone[0];
       //
