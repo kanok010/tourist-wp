@@ -394,7 +394,7 @@ class JSON_API_Contents_Controller {
         $post['detail'] = $data->custom_fields->detail[0];
         $post['detail_cn'] = $data->custom_fields->detail_cn[0];
         $post['term'] = $data->custom_fields->term[0];
-        $post['term_cn'] = $data->custom_fields->term_cn[0];
+        $post['term_cn'] = $data->custom_fields->term_cn[0];       
         $attachments = $data->attachments;
         $t = $this->wp_attach($data->custom_fields->thumbnail , 'full' , $attachments );
         $post['thumbnail'] = $t[0]['url'];
@@ -615,7 +615,9 @@ class JSON_API_Contents_Controller {
     foreach ($datas as $data) {
       $post = array();
       $post['id'] = $data->id;
-      $post['title'] = isset($data->custom_fields->{'title_'.$lang}[0])? $data->custom_fields->{'title_'.$lang}[0] : $data->title ;
+      
+      $title = trim($data->custom_fields->{'title_'.$lang}[0]);
+      $post['title'] = ($title)? $title : $data->title ;
       //
       $post['telephone'] = $data->custom_fields->telephone[0];
       //
