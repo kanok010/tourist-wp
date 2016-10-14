@@ -310,15 +310,20 @@ class JSON_API_Contents_Controller {
   
   //Packages
   public function packages( $post_type = 'package',$query = false){
-    global $json_api;
+    global $json_api,$wp_query;
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
 
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
     //print_r($posts);exit;
     $posts = $this->packages_repo($posts);
-    
-    return $this->posts_result2($posts);
+
+    return array(
+      'count' => count($posts), //offset
+      'post_type' => $wp_query->query_vars['post_type'],
+      'header_title' => "4G Internet Package",  
+      'datas' => $posts
+    );
   }
   
   protected function packages_repo($datas){
@@ -602,8 +607,7 @@ class JSON_API_Contents_Controller {
   //hotline
   public function hotline( $post_type = 'hotline',$query = false){
     global $json_api;
-    $query = $this->setOrder();
-
+    $query = array("orderby" => "menu_order");
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     $posts = $this->hotline_repo($posts);
     // print_r($posts);exit;
