@@ -310,7 +310,7 @@ class JSON_API_Develop_Controller {
   
   //Packages
   public function packages( $post_type = 'package',$query = false){
-    global $json_api;
+    global $json_api,$wp_query;
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" , "post_status"=>'pending');
     
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
@@ -318,7 +318,12 @@ class JSON_API_Develop_Controller {
     //print_r($posts);exit;
     $posts = $this->packages_repo($posts);
     
-    return $this->posts_result2($posts);
+    return array(
+      'count' => count($posts), //offset
+      'post_type' => $post_type,
+      'header_title' => "4G Internet Package",  
+      'datas' => $posts
+    );
   }
   
   protected function packages_repo($datas){
@@ -604,12 +609,11 @@ class JSON_API_Develop_Controller {
   //hotline
   public function hotline( $post_type = 'hotline',$query = false){
     global $json_api;
-    $query = $this->setOrder();
-    $query = array("post_status"=>'pending');
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC","post_status"=>'pending');
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     $posts = $this->hotline_repo($posts);
     // print_r($posts);exit;
-    return $this->posts_result($posts);
+    return $this->posts_result2($posts);
   }
 
   protected function hotline_repo($datas){
@@ -631,6 +635,35 @@ class JSON_API_Develop_Controller {
     return $posts;
   }
 
+  //Service No.
+  public function service( $post_type = 'service',$query = false){
+    global $json_api;
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC");
+    $posts = $json_api->introspector->get_posts($query,false,$post_type);
+    $posts = $this->service_repo($posts);
+    // print_r($posts);exit;
+    return $this->posts_result2($posts);
+  }
+
+  protected function service_repo($datas){
+    $posts = array();
+    $lang = $this->get_lang();
+    foreach ($datas as $data) {
+      $post = array();
+      $post['id'] = $data->id;
+      
+      $title = trim($data->custom_fields->{'title_'.$lang}[0]);
+      $post['title'] = ($title)? $title : $data->title ;
+      //
+      $post['telephone'] = $data->custom_fields->telephone[0];
+      //
+      $post['created_date'] = $data->date;
+      $post['updated_date'] = $data->modified;
+      array_push($posts, $post);
+    }
+    return $posts;
+  }
+  
   // shelf
   public function shelf( $post_type = 'shelf',$query = false){
     global $json_api;
