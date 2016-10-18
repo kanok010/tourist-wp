@@ -632,6 +632,35 @@ class JSON_API_Contents_Controller {
     }
     return $posts;
   }
+  
+  //Service No.
+  public function service( $post_type = 'service',$query = false){
+    global $json_api;
+    $query = array("orderby" => "menu_order" ,  "order" => "ASC");
+    $posts = $json_api->introspector->get_posts($query,false,$post_type);
+    $posts = $this->service_repo($posts);
+    // print_r($posts);exit;
+    return $this->posts_result2($posts);
+  }
+
+  protected function service_repo($datas){
+    $posts = array();
+    $lang = $this->get_lang();
+    foreach ($datas as $data) {
+      $post = array();
+      $post['id'] = $data->id;
+      
+      $title = trim($data->custom_fields->{'title_'.$lang}[0]);
+      $post['title'] = ($title)? $title : $data->title ;
+      //
+      $post['telephone'] = $data->custom_fields->telephone[0];
+      //
+      $post['created_date'] = $data->date;
+      $post['updated_date'] = $data->modified;
+      array_push($posts, $post);
+    }
+    return $posts;
+  }
 
   // shelf
   public function shelf( $post_type = 'shelf',$query = false){
