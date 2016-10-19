@@ -3,8 +3,8 @@ Contributors: whiteshadow
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A6P9S6CE3SRSW
 Tags: admin, dashboard, menu, security, wpmu
 Requires at least: 4.1
-Tested up to: 4.4
-Stable tag: 1.5
+Tested up to: 4.6
+Stable tag: 1.7.2
 
 Lets you edit the WordPress admin menu. You can re-order, hide or rename menus, add custom menus and more. 
 
@@ -62,6 +62,47 @@ Plugins installed in the `mu-plugins` directory are treated as "always on", so y
 3. Re-ordering menu items via drag and drop
 
 == Changelog ==
+
+= 1.7.2 =
+* Added capability suggestions and access preview to the "Extra capability" dropdown.
+* The plugin now remembers the last selected menu item and re-selects it after you save changes.
+* Fixed a layout issue where menus with very long titles would appear incorrectly in the menu editor.
+* When you change the menu title, the window title will also be changed to match it. You can still edit the window title separately if necessary.
+* Moved the "Icon URL" field up and moved "Window title" down.
+
+= 1.7.1 =
+* Split the "required capability" field into two parts - a read-only field that shows the actual required capability, and an editable "extra capability" that you can use to restrict access to the menu.
+* Added more detailed permission error messages. You can turn them off in the "Settings" tab by changing "Error verbosity level" to "Low".
+* Tested up to WP 4.6.
+
+= 1.7 =
+* Added a "Plugins" tab. It lets you hide specific plugins from other users. Note that this only affects the list on the "Plugins" page and tasks like editing plugin files, but it doesn't affect the admin menu.
+* Tested up to WordPress 4.6-beta3. 
+
+= 1.6.2 =
+* Fixed a bug that made menu items "jump" slightly to the left when you start to drag them.
+* Fixed a Multisite-specific bug where temporarily switching to another site using the switch_to_blog() function could result in the user having the wrong permissions.
+* When saving settings, the plugin will now compress the menu data before sending it to the server. This reduces the chances of exceeding request size limits that are imposed by some hosting companies.
+* You can dismiss the "Settings saved" notification by clicking the "x" button.
+* Tested up to WordPress 4.5.2.
+
+= 1.6.1 =
+* Fixed a bug introduced in version 1.6 that prevented the "collapse menu" link from working. In some cases, this bug also made it impossible to switch between "Help" tabs.
+
+= 1.6 =
+* Improved PHP 7 support.
+* Added a few more menu icons.
+* Added tabs to the settings page: "Admin Menu" and "Settings". These tabs replace the heading buttons that were previously used to switch between the menu editor and general plugin settings.
+* Added basic support for the special "customize" and "delete_site" meta capabilities.
+* Fixed a bug that prevented menu items with an empty slug (i.e. no URL) from showing up.
+* Fixed a bug where collapsing menu properties would flag the "Icon URL" field as having a custom value even if you hadn't actually changed it.
+* Fixed a rare WPML conflict that sometimes caused the admin menu to use a mix of different languages.
+* Improved compatibility with buggy plugins and themes that throw JavaScript errors in their DOM-ready handlers.
+* Renamed jquery.cookie.js to jquery.biscuit.js as a workaround for servers with overly aggressive ModSecurity configuration. Apparently, some servers block access to any URL that contains the text ".cookie".
+* Added a compatibility workaround for the DW Question & Answer plugin. The hidden "Welcome", "Changelog" and "Credits" menu items should no longer show up when you activate AME.
+* Added locking to reduce the risk of triggering a race condition when saving menu settings.
+* Removed the non-functional "Embed WP page" option.
+* Tested up to WordPress 4.5-RC1.
 
 = 1.5 = 
 * Added "Keep this menu open" checkbox. This setting keeps a top level menu expanded even if it is not the current menu.

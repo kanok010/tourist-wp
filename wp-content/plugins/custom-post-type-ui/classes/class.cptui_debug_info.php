@@ -1,17 +1,40 @@
 <?php
+/**
+ * Custom Post Type UI Debug Information.
+ *
+ * @package CPTUI
+ * @subpackage Debugging
+ * @author WebDevStudios
+ * @since 1.2.0
+ */
 
+/**
+ * Custom Post Type UI Debug Info
+ */
 class CPTUI_Debug_Info {
 
+	/**
+	 * Tab content for the debug info tab.
+	 *
+	 * @since 1.2.0
+	 */
 	public function tab_site_info() {
 		?>
 		<p><?php _e( 'If you have sought support for Custom Post Type UI on the forums, you may be requested to send the information below to the plugin developer. Simply insert the email they provided in the input field at the bottom and click the "Send debug info" button. Only the data below will be sent to them.', 'custom-post-type-ui' ); ?></p>
 		<label for="cptui_audit_textarea">
-		<textarea readonly="readonly" id="cptui-audit-textarea" name="cptui_audit_textarea" rows="20" cols="100">
+		<textarea readonly="readonly" aria-readonly="true" id="cptui-audit-textarea" name="cptui_audit_textarea" rows="20" cols="100">
 			<?php echo $this->system_status(); ?>
 		</textarea></label>
 		<?php
 	}
 
+	/**
+	 * Generate the debug information content.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @return string
+	 */
 	private function system_status() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return '';
@@ -19,13 +42,8 @@ class CPTUI_Debug_Info {
 
 		global $wpdb;
 
-		if ( get_bloginfo( 'version' ) < '3.4' ) {
-			$theme_data = get_theme_data( get_stylesheet_directory() . '/style.css' );
-			$theme = $theme_data['Name'] . ' ' . $theme_data['Version'];
-		} else {
-			$theme_data = wp_get_theme();
-			$theme = $theme_data->Name . ' ' . $theme_data->Version;
-		}
+		$theme_data = wp_get_theme();
+		$theme = $theme_data->Name . ' ' . $theme_data->Version;
 
 		ob_start();
 		?>
@@ -53,33 +71,31 @@ class CPTUI_Debug_Info {
 		Page For Posts:           <?php $id = get_option( 'page_for_posts' );
 		echo get_the_title( $id ) . ' (#' . $id . ')' . "\n" ?>
 
-		WordPress Memory Limit:   <?php echo ( $this->num_convt( WP_MEMORY_LIMIT ) / ( 1024 ) ) . "MB"; ?><?php echo "\n"; ?>
+		WordPress Memory Limit:   <?php echo ( $this->num_convt( WP_MEMORY_LIMIT ) / ( 1024 ) ) . 'MB'; ?><?php echo "\n"; ?>
 
 		<?php
 		$plugins  = get_plugins();
 		$pg_count = count( $plugins );
 		echo 'TOTAL PLUGINS: ' . $pg_count . "\n\n";
-		// MU plugins
+		// MU plugins.
 		$mu_plugins = get_mu_plugins();
 
 		if ( $mu_plugins ) :
-			$mu_count = count( $mu_plugins );
-
-			echo 'MU PLUGINS: (' . $mu_count . ')' . "\n\n";
+			echo "\t\t" . 'MU PLUGINS: (' . count( $mu_plugins ) . ')' . "\n\n";
 
 			foreach ( $mu_plugins as $mu_path => $mu_plugin ) {
 
-				echo $mu_plugin['Name'] . ': ' . $mu_plugin['Version'] . "\n";
+				echo "\t\t" . $mu_plugin['Name'] . ': ' . $mu_plugin['Version'] . "\n";
 			}
 		endif;
-		// standard plugins - active
+		// Standard plugins - active.
 		echo "\n";
 
 		$active   = get_option( 'active_plugins', array() );
 		$ac_count = count( $active );
 		$ic_count = $pg_count - $ac_count;
 
-		echo 'ACTIVE PLUGINS: (' . $ac_count . ')' . "\n\n";
+		echo "\t\t" . 'ACTIVE PLUGINS: (' . $ac_count . ')' . "\n\n";
 
 		foreach ( $plugins as $plugin_path => $plugin ) {
 			// If the plugin isn't active, don't show it.
@@ -87,11 +103,11 @@ class CPTUI_Debug_Info {
 				continue;
 			}
 
-			echo $plugin['Name'] . ': ' . $plugin['Version'] . "\n";
+			echo "\t\t" . $plugin['Name'] . ': ' . $plugin['Version'] . "\n";
 		}
-		// standard plugins - inactive
+		// Standard plugins - inactive.
 		echo "\n";
-		echo 'INACTIVE PLUGINS: (' . $ic_count . ')' . "\n\n";
+		echo "\t\t" , 'INACTIVE PLUGINS: (' . $ic_count . ')' . "\n\n";
 
 		foreach ( $plugins as $plugin_path => $plugin ) {
 			// If the plugin isn't active, show it here.
@@ -99,10 +115,10 @@ class CPTUI_Debug_Info {
 				continue;
 			}
 
-			echo $plugin['Name'] . ': ' . $plugin['Version'] . "\n";
+			echo "\t\t" . $plugin['Name'] . ': ' . $plugin['Version'] . "\n";
 		}
 
-		// if multisite, grab network as well
+		// If multisite, grab network as well.
 		if ( is_multisite() ) :
 
 			$net_plugins = wp_get_active_network_plugins();
@@ -127,15 +143,28 @@ class CPTUI_Debug_Info {
 		endif;
 
 		echo "\n";
-		$cptui_post_types = get_option( 'cptui_post_types', array() );
-		echo 'Post Types: ' . "\n";
-		echo esc_html( json_encode( $cptui_post_types ) ) . "\n";
+		$cptui_post_types = cptui_get_post_type_data();
+		echo "\t\t" . 'Post Types: ' . "\n";
+		echo "\t\t" . esc_html( json_encode( $cptui_post_types ) ) . "\n";
 
 		echo "\n\n";
 
-		$cptui_taxonomies = get_option( 'cptui_taxonomies', array() );
-		echo 'Taxonomies: ' . "\n";
-		echo esc_html( json_encode( $cptui_taxonomies ) ) . "\n";
+		$cptui_taxonomies = cptui_get_taxonomy_data();
+		echo "\t\t" . 'Taxonomies: ' . "\n";
+		echo "\t\t" . esc_html( json_encode( $cptui_taxonomies ) ) . "\n";
+		echo "\n";
+
+		if ( has_action( 'cptui_custom_debug_info' ) ) {
+			echo "\t\t" . 'EXTRA DEBUG INFO';
+		}
+
+		/**
+		 * Fires at the end of the debug info output.
+		 *
+		 * @since 1.3.0
+		 */
+		do_action( 'cptui_custom_debug_info' );
+
 		echo "\n";
 		?>
 		### End Debug Info ###
@@ -145,10 +174,12 @@ class CPTUI_Debug_Info {
 	}
 
 	/**
-	 * helper function for number conversions
+	 * Helper function for number conversions.
+	 *
+	 * @since 1.2.0
 	 * @access public
 	 *
-	 * @param mixed $v
+	 * @param mixed $v Value.
 	 * @return int
 	 */
 	public function num_convt( $v ) {
@@ -156,11 +187,11 @@ class CPTUI_Debug_Info {
 		$ret = substr( $v, 0, - 1 );
 
 		switch ( strtoupper( $l ) ) {
-			case 'P': // fall-through
-			case 'T': // fall-through
-			case 'G': // fall-through
-			case 'M': // fall-through
-			case 'K': // fall-through
+			case 'P': // Fall-through.
+			case 'T': // Fall-through.
+			case 'G': // Fall-through.
+			case 'M': // Fall-through.
+			case 'K': // Fall-through.
 				$ret *= 1024;
 				break;
 			default:
@@ -170,7 +201,15 @@ class CPTUI_Debug_Info {
 		return $ret;
 	}
 
-	public function send_email( $args ) {
+	/**
+	 * Sends an email to the specified address, with the system status as the message.
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param array $args Array of arguments for the method.
+	 * @return bool
+	 */
+	public function send_email( $args = array() ) {
 
 		if ( ! isset( $args['email'] ) || ! is_email( $args['email'] ) ) {
 			return false;
@@ -182,12 +221,27 @@ class CPTUI_Debug_Info {
 
 		$message = $this->system_status();
 
-		$subject = sprintf(
-			__( 'CPTUI debug information for %s'),
+		/**
+		 * Filters the debug email subject.
+		 *
+		 * @since 1.3.0
+		 *
+		 * @param string $value Intended email subject.
+		 */
+		$subject = apply_filters( 'cptui_debug_email_subject', sprintf(
+			__( 'CPTUI debug information for %s', 'custom-post-type-ui' ),
 			home_url( '/' )
-		);
+		) );
 
-		wp_mail( $args['email'], $subject, $message );
+		$result = wp_mail( $args['email'], $subject, $message );
+
+		/**
+		 * Fires after the debug email has been sent.
+		 *
+		 * @since 1.3.0
+		 */
+		do_action( 'cptui_after_debug_email_sent' );
+
+		return $result;
 	}
 }
-
