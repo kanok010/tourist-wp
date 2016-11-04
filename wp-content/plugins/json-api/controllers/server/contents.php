@@ -548,6 +548,7 @@ class JSON_API_Contents_Controller {
                 $post['id'] = $data->id;
                 $post['title'] = $data->title;
                 $post['detail'] = $data->custom_fields->detail[0];
+		$post['show_type'] = $data->custom_fields->show_type[0];
                 $attachments = $data->attachments;
                 $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
                 $post['image'] = $t[0]['url'];
@@ -576,6 +577,7 @@ class JSON_API_Contents_Controller {
                 $post['id'] = $data->id;
                 $post['title'] = $data->title;
                 $post['detail'] = $data->custom_fields->detail[0];
+		$post['show_type'] = $data->custom_fields->show_type[0];
                 $attachments = $data->attachments;
                 $t = $this->wp_attach($data->custom_fields->image , 'full' , $attachments );
                 $post['image'] = $t[0]['url'];
