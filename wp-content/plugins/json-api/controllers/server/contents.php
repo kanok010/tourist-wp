@@ -508,7 +508,7 @@ class JSON_API_Contents_Controller {
   public function announcement( $post_type = 'announcement',$query = false){
     global $json_api;
     $query = array("orderby" => "menu_order" ,  "order" => "ASC" );
-    $query = array("posts_per_page" => "1");
+   // $query = array("posts_per_page" => "1");
     $posts = $json_api->introspector->get_posts($query,false,$post_type);
     
     //print_r($posts);exit;
