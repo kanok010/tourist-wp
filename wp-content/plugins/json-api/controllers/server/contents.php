@@ -556,7 +556,7 @@ class JSON_API_Contents_Controller {
                 $post['end_date'] = $end_date; 
                 $post['btn_status'] = $data->custom_fields->btn_status[0];
                 if($post['btn_status'] == "1"){
-                    $post['btn_title'] = $data->custom_fields->btn_title[0];
+                    //$post['btn_title'] = $data->custom_fields->btn_title[0];
                     $post['btn_type'] = $data->custom_fields->btn_type[0];
                     
                     if($post['btn_type'] =="schema"){
@@ -566,7 +566,7 @@ class JSON_API_Contents_Controller {
                     }
                     
                 }else{
-                    $post['btn_title'] = "";
+                    //$post['btn_title'] = "";
                     $post['btn_type'] = "";
                     $post['btn_link'] = "";
                 }
@@ -591,7 +591,7 @@ class JSON_API_Contents_Controller {
                 $post['end_date'] = $end_date; 
                 $post['btn_status'] = $data->custom_fields->btn_status[0];
                 if($post['btn_status'] == "1"){
-                    $post['btn_title'] = $data->custom_fields->btn_title[0];
+                    //$post['btn_title'] = $data->custom_fields->btn_title[0];
                     $post['btn_type'] = $data->custom_fields->btn_type[0];
                     
                     if($post['btn_type'] =="schema"){
@@ -601,7 +601,7 @@ class JSON_API_Contents_Controller {
                     }
                     
                 }else{
-                    $post['btn_title'] = "";
+                    //$post['btn_title'] = "";
                     $post['btn_type'] = "";
                     $post['btn_link'] = "";
                 }
